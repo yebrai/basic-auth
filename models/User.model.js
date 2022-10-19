@@ -1,6 +1,7 @@
 const { Schema, model } = require("mongoose");
 
 // TODO: Please make sure you edit the User model to whatever makes sense in this case
+// AQUI SE DECLARAN LOS VALIDADORES DE BASE DE DATOS
 const userSchema = new Schema(
   {
     username: {
