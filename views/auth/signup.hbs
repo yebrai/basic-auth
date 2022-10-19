@@ -3,16 +3,20 @@
   <h3>Formulario de registro</h3>
 
   <form action="/auth/signup" method="POST">
-
+    {{! required, type... son validadores de frontend pero son vulnerables}}
     <label for="username">Nombre de Usuario:</label>
     <input type="text" name="username" />
+    {{! <input type="text" name="username" required="true"/> }}
     <br />
     <label for="email">Correo Electronico:</label>
     <input type="text" name="email" />
+    {{! <input type="email" name="email" /> }}
     <br />
     <label for="password">Contraseña:</label>
     <input type="text" name="password" />
+    {{! <input type="password" name="password" /> }}
     <br />
+    <p style="color: red">{{errorMessage}}</p>
     <button>Registrarme</button>
   </form>
 
