@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require("../models/User.model")
+const bcrypt = require('bcryptjs');
 
 //aqui van las rutas de authenticacion (singup y login)
 
@@ -58,13 +59,16 @@ router.get("/signup", (req, res, next) => {
         
 
         // 2. Elemento de seguridad
-    
+        const salt = await bcrypt.genSalt(12)
+        const hashPassword = await bcrypt.hash(password, salt)
+
+
         // 3. Crear el perfil del usuario
 
         const newUser = {
             username: username,
             email: email,
-            password: password
+            password: hashPassword
         }
 
         await User.create(newUser)
@@ -76,20 +80,65 @@ router.get("/signup", (req, res, next) => {
         next(error)
     }
 
-
-
  })
 
 // GET /auth/login - rengit deriza el form de login
 
  router.get("/login", (req, res, next) => {
-    
     res.render("auth/login.hbs")
  })
 
 
 // POST /auth/login - guarda la data del form de login
 
-// router.post("/login", (req, res, next) => {
+router.post("/login", async (req, res, next) => {
+    const { email, password } = req.body
+    console.log(req.body)
     
-// })
+    // 1. Validacion de backend
+    if (email === "" || password === "") {
+        res.render("auth/login.hbs", {
+            errorMessage:"usuario ya creado con ese nombre"
+        })
+        return;
+    }
+
+    // verificar que el usuario exista
+
+    // EJEMPLO dos campos de contraseña, verificar que sean igual. if (password1 !== password2)
+    
+    try {
+        const foundUser = await User.findOne({email: email})
+        if (foundUser === null) {
+            //Si no existe
+            res.render("auth/login.hbs", {
+                errorMessage:"correo electronico o contraseña incorrecta"
+            })
+            return;
+        }
+        // 2. verificar la contraseña del usuario (validar)
+        const isPasswordValid = await bcrypt.compare(password, foundUser.password)
+        console.log("isPasswordValid", isPasswordValid)
+        if (isPasswordValid === false) {
+            res.render("auth/login.hbs", {
+                errorMessage:"correo electronico o contraseña incorrecta"
+            })
+            return;
+        }
+        // a partir de este punto el usuario estaria validado
+        
+        
+        // 3. implementar sistema de sesiones y abrir una sesion para este
+        // que el usuario solo puede entrar a profile si tiene o ha iniciado sesion
+        //nos da el id del usuario activo para funcionalidades
+        // nos ayuda a tener enlaces especificos si el usuario esta logeado o no
+
+    
+        // 4. redireccionar a una pagina privada
+        res.redirect("/profile")
+        
+    } catch (error) {
+        next(error)
+    }
+
+})
