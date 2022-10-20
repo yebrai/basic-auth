@@ -19,6 +19,7 @@ const isAdmin = (req, res ,next) => {
 }
 
 const testing = "haciendo pruebas"
+const test2 = "otro test"
 
 module.exports = {
     isLoggedIn,
