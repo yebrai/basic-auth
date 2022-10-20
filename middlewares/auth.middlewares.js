@@ -8,7 +8,7 @@ const isLoggedIn = (req, res, next) => {
     }
 }
 
-const isAdmin = (req, res ,ext) => {
+const isAdmin = (req, res ,next) => {
     if (req.session.activeUser === undefined || req.session.activeUser.role !== "admin") {
         // no tienes permiso    
     } else {
@@ -17,6 +17,8 @@ const isAdmin = (req, res ,ext) => {
 
     }
 }
+
+const testing = "haciendo pruebas"
 
 module.exports = {
     isLoggedIn,
