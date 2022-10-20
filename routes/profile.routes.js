@@ -1,9 +1,9 @@
 const express = require('express');
 const User = require('../models/User.model');
 const router = express.Router();
+const {isLoggedIn, isAdmin} = require ("../middlewares/auth.middlewares.js")
 
 
-const {isLoggedIn} = require ("../middlewares/auth.middlewares.js")
 //aqui van nuestras rutas de perfil (verlo, actualizarlo, ver usuarios, etc)
 // GET "/profile" => el usuario puede ver su perfil
 router.get("/", isLoggedIn, (req, res, next) => {
@@ -22,9 +22,16 @@ router.get("/", isLoggedIn, (req, res, next) => {
       next(err)
     })
     
+
     
     
     
+})
+
+// GET "/profile/admin-dashboard" => ruta para que el admin tenga un panel de control
+router.get("/admin-dashboard", isAdmin, (req, res, next) => {
+
+  res.render("profile/admin-dashboard.hbs")
 })
 
 module.exports = router;

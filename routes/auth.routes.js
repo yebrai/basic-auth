@@ -76,6 +76,17 @@ router.get("/signup", (req, res, next) => {
         // para pruebas, para enviar algo al cliente
         res.redirect("/")
         
+        //Si queremos hacer que que al crear la cuenta directamente acceda, deberiamos de incluir:         req.session.activeUser = foundUser;// ESTA ES LA LINEA QUE CREA LA SESION/COOKIE
+
+        // req.session.activeUser = foundUser;// ESTA ES LA LINEA QUE CREA LA SESION/COOKIE
+
+        // // el metodo es para asegurar que la sesion se ha creado correctamente antes de continuar
+        // req.session.save(() => {
+        //     // 4. redireccionar a una pagina privada
+        //     res.redirect("/profile")
+
+        // })
+        
     } catch (error) {
         next(error)
     }
